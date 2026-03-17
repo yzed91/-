@@ -1,137 +1,179 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>تهنئة العيد</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>تهنئة العيد</title>
 
-<style>
-@font-face {
-  font-family: "Hacen";
-  src: url("HacenTunisia.ttf");
-}
-
-body {
-  font-family: Arial;
-  text-align: center;
-  background: #f5f5f5;
-  margin: 0;
-  padding: 20px;
-}
-
-.images {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin: 20px 0;
-}
-
-.images img {
-  width: 150px;
-  border-radius: 10px;
-  cursor: pointer;
-  border: 3px solid transparent;
-}
-
-.images img.selected {
-  border-color: #000;
-}
-
-input {
-  padding: 12px;
-  font-size: 18px;
-  border-radius: 10px;
-}
-
-button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  border-radius: 10px;
-  background: black;
-  color: white;
-  cursor: pointer;
-}
-
-canvas {
-  max-width: 100%;
-  margin-top: 20px;
-}
-
-.footer {
-  margin-top: 40px;
-  font-size: 13px;
-  color: #888;
-  line-height: 2;
-}
-</style>
-</head>
-
-<body>
-
-<h2>اختر التصميم واكتب اسمك 🎉</h2>
-
-<div class="images">
-  <img src="eid1.PNG" onclick="selectImage(this, 'eid1.PNG')" class="selected">
-  <img src="eid2.PNG" onclick="selectImage(this, 'eid2.PNG')">
-</div>
-
-<input type="text" id="nameInput" placeholder="اكتب اسمك هنا">
-<br>
-<button onclick="generateImage()">تحميل الصورة</button>
-
-<canvas id="canvas"></canvas>
-
-<script>
-let selectedImage = "eid1.PNG";
-
-function selectImage(el, src) {
-  selectedImage = src;
-  document.querySelectorAll(".images img").forEach(i => i.classList.remove("selected"));
-  el.classList.add("selected");
-}
-
-function generateImage() {
-  const name = document.getElementById("nameInput").value;
-  const canvas = document.getElementById("canvas");
-  const ctx = canvas.getContext("2d");
-
-  const img = new Image();
-  img.src = selectedImage;
-
-  img.onload = () => {
-    canvas.width = img.width;
-    canvas.height = img.height;
-
-    ctx.drawImage(img, 0, 0);
-
-    // 🎨 تحديد اللون حسب التصميم
-    let color = "#E9C699"; // eid1
-
-    if (selectedImage === "eid2.PNG") {
-      color = "#444D65";
+  <style>
+    @font-face {
+      font-family: "Hacen";
+      src: url("HacenTunisia.ttf") format("truetype");
     }
 
-    // ✍️ الخط
-    ctx.font = "27px Hacen";
-    ctx.fillStyle = color;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
 
-    // 📍 مكان الاسم داخل الإطار (مضبوط)
-    ctx.fillText(name, canvas.width / 2, canvas.height * 0.70);
+    h2 {
+      color: #222;
+      margin-bottom: 15px;
+    }
 
-    const link = document.createElement("a");
-    link.download = "eid.png";
-    link.href = canvas.toDataURL();
-    link.click();
-  };
-}
-</script>
+    .images {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
 
-<div class="footer">
-هذا العمل مقدم لكم مجانًا من يزيد بن عبدالرحمن،<br>
-ولا أرجو منكم إلا الدعاء لوالدي رحمه الله، وأن يحفظ الله والدتي ويمدّها بالصحة والعافية
-</div>
+    .images img {
+      width: 140px;
+      border-radius: 12px;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: 0.2s;
+    }
+
+    .images img.selected {
+      border-color: #000;
+      transform: scale(1.03);
+    }
+
+    input {
+      width: 80%;
+      max-width: 320px;
+      padding: 12px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    button {
+      margin-top: 12px;
+      padding: 12px 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background: #111;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    canvas {
+      max-width: 100%;
+      margin-top: 20px;
+      border-radius: 12px;
+    }
+
+    .footer {
+      margin-top: 40px;
+      font-size: 13px;
+      color: #888;
+      line-height: 2;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>اختر التصميم واكتب اسمك 🎉</h2>
+
+  <div class="images">
+    <img src="eid1.PNG" onclick="selectImage(this, 'eid1.PNG')" class="selected">
+    <img src="eid2.PNG" onclick="selectImage(this, 'eid2.PNG')">
+  </div>
+
+  <input type="text" id="nameInput" placeholder="اكتب اسمك هنا">
+  <br>
+  <button onclick="generateImage()">تحميل الصورة</button>
+
+  <canvas id="canvas"></canvas>
+
+  <script>
+    let selectedImage = "eid1.PNG";
+
+    function selectImage(el, src) {
+      selectedImage = src;
+      document.querySelectorAll(".images img").forEach(img => {
+        img.classList.remove("selected");
+      });
+      el.classList.add("selected");
+    }
+
+    function fitText(ctx, text, maxWidth, startSize, fontName) {
+      let size = startSize;
+      while (size > 12) {
+        ctx.font = `${size}px "${fontName}"`;
+        if (ctx.measureText(text).width <= maxWidth) {
+          return size;
+        }
+        size--;
+      }
+      return size;
+    }
+
+    async function generateImage() {
+      const name = document.getElementById("nameInput").value.trim();
+      if (!name) return;
+
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+
+      const img = new Image();
+      img.src = selectedImage;
+
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+      });
+
+      if (document.fonts) {
+        await document.fonts.load('27px "Hacen"');
+        await document.fonts.ready;
+      }
+
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0);
+
+      let color = "#E9C699";
+      if (selectedImage === "eid2.PNG") {
+        color = "#444D65";
+      }
+
+      const x = 540;
+      const y = 1140;
+      const maxWidth = 360;
+
+      const fontSize = fitText(ctx, name, maxWidth, 27, "Hacen");
+
+      ctx.font = `${fontSize}px "Hacen"`;
+      ctx.fillStyle = color;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.direction = "rtl";
+
+      ctx.fillText(name, x, y, maxWidth);
+
+      const link = document.createElement("a");
+      link.download = "eid.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
+  </script>
+
+  <div class="footer">
+    هذا العمل مقدم لكم مجانًا من يزيد بن عبدالرحمن،<br>
+    ولا أرجو منكم إلا الدعاء لوالدي رحمه الله، وأن يحفظ الله والدتي ويمدّها بالصحة والعافية
+  </div>
 
 </body>
 </html>
