@@ -111,7 +111,8 @@
       max-width: 100%;
       border-radius: 12px;
       box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-      cursor: pointer;
+      cursor: default;
+      pointer-events: none;
     }
 
     .actions {
@@ -143,23 +144,21 @@
 
   <input type="text" id="nameInput" placeholder="اكتب اسمك هنا">
   <br>
-  <button onclick="generateImage()">تحميل الصورة</button>
+  <button onclick="generateImage()">إنشاء الصورة</button>
 
   <canvas id="canvas"></canvas>
 
   <div id="resultContainer">
     <div id="resultHint">
-      تم إنشاء الصورة.<br>
-      يمكنك الضغط على الصورة لفتحها، أو الضغط المطول عليها لحفظها، أو استخدام زر المشاركة إذا كان متاحًا.
+      تم إنشاء الصورة بنجاح.<br>
+      لحفظها استخدم زر تحميل الصورة فقط.
     </div>
 
-    <a id="resultLink" href="#" target="_blank" rel="noopener">
-      <img id="resultImage" src="" alt="الصورة الناتجة">
-    </a>
+    <img id="resultImage" src="" alt="الصورة الناتجة">
 
     <div class="actions">
       <button id="shareBtn" class="secondary-btn" style="display:none;" onclick="shareImage()">مشاركة / حفظ</button>
-      <button id="downloadBtn" onclick="downloadGeneratedImage()">تحميل مرة أخرى</button>
+      <button id="downloadBtn" onclick="downloadGeneratedImage()">تحميل الصورة</button>
     </div>
   </div>
 
@@ -227,13 +226,12 @@
         } else if (navigator.share) {
           await navigator.share({
             title: "تهنئة العيد",
-            text: "تم إنشاء صورة التهنئة، يمكنك حفظها من الصفحة المفتوحة."
+            text: "تم إنشاء صورة التهنئة."
           });
         } else {
-          alert("ميزة المشاركة غير مدعومة هنا. يمكنك الضغط المطول على الصورة لحفظها.");
+          alert("ميزة المشاركة غير مدعومة هنا.");
         }
       } catch (e) {
-        // تجاهل إذا المستخدم أغلق نافذة المشاركة
       }
     }
 
@@ -286,11 +284,9 @@
 
       const resultContainer = document.getElementById("resultContainer");
       const resultImage = document.getElementById("resultImage");
-      const resultLink = document.getElementById("resultLink");
       const shareBtn = document.getElementById("shareBtn");
 
       resultImage.src = generatedImageURL;
-      resultLink.href = generatedImageURL;
       resultContainer.style.display = "block";
 
       if (navigator.share) {
@@ -298,9 +294,6 @@
       } else {
         shareBtn.style.display = "none";
       }
-
-      // يبقى التحميل المباشر موجود للمتصفحات اللي تدعمه
-      downloadGeneratedImage();
     }
   </script>
 
