@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>تهنئة العيد</title>
 
   <style>
@@ -59,6 +59,10 @@
       cursor: pointer;
     }
 
+    button:hover {
+      background: #333;
+    }
+
     canvas {
       max-width: 100%;
       margin-top: 20px;
@@ -82,8 +86,8 @@
 
   <!-- اختيار الصور -->
   <div class="images">
-    <img src="eid1.jpg" onclick="selectImage(this, 'eid1.jpg')">
-    <img src="eid2.jpg" onclick="selectImage(this, 'eid2.jpg')">
+    <img src="eid1.png" onclick="selectImage(this, 'eid1.png')" class="selected">
+    <img src="eid2.png" onclick="selectImage(this, 'eid2.png')">
   </div>
 
   <input type="text" id="nameInput" placeholder="اكتب اسمك هنا">
@@ -94,7 +98,7 @@
   <canvas id="canvas"></canvas>
 
   <script>
-    let selectedImage = "eid1.jpg";
+    let selectedImage = "eid1.png";
 
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
