@@ -33,7 +33,7 @@
     }
 
     .eid-text {
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       font-size: 15px;
       color: #444;
     }
@@ -189,10 +189,44 @@
 
       ctx.fillText(name, x, y, maxWidth);
 
+      const imageURL = canvas.toDataURL("image/png");
+
+      // تحميل مباشر
       const link = document.createElement("a");
       link.download = "eid.png";
-      link.href = canvas.toDataURL("image/png");
+      link.href = imageURL;
       link.click();
+
+      // الضغط على الصورة يفتحها
+      canvas.style.cursor = "pointer";
+
+      canvas.onclick = () => {
+        const newTab = window.open();
+        newTab.document.write(`
+          <html>
+            <head>
+              <title>تحميل الصورة</title>
+              <style>
+                body {
+                  margin:0;
+                  display:flex;
+                  justify-content:center;
+                  align-items:center;
+                  height:100vh;
+                  background:#000;
+                }
+                img {
+                  max-width:100%;
+                  height:auto;
+                }
+              </style>
+            </head>
+            <body>
+              <img src="${imageURL}" />
+            </body>
+          </html>
+        `);
+      };
     }
   </script>
 
