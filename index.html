@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تهنئة العيد</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h2 {
+      color: #222;
+    }
+
+    .images {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .images img {
+      width: 150px;
+      border-radius: 10px;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: 0.3s;
+    }
+
+    .images img.selected {
+      border-color: #000;
+      transform: scale(1.05);
+    }
+
+    input {
+      width: 80%;
+      max-width: 320px;
+      padding: 12px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 12px 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background: #111;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    canvas {
+      max-width: 100%;
+      margin-top: 20px;
+      border-radius: 12px;
+    }
+
+    .footer {
+      margin-top: 40px;
+      padding: 20px;
+      font-size: 13px;
+      color: #888;
+      line-height: 2;
+      border-top: 1px solid #eee;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>اختر التصميم واكتب اسمك 🎉</h2>
+
+  <!-- اختيار الصور -->
+  <div class="images">
+    <img src="eid1.jpg" onclick="selectImage(this, 'eid1.jpg')">
+    <img src="eid2.jpg" onclick="selectImage(this, 'eid2.jpg')">
+  </div>
+
+  <input type="text" id="nameInput" placeholder="اكتب اسمك هنا">
+  <br>
+  <button onclick="generateImage()">تحميل الصورة</button>
+
+  <br>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    let selectedImage = "eid1.jpg";
+
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    function selectImage(el, src) {
+      selectedImage = src;
+
+      document.querySelectorAll(".images img").forEach(img => {
+        img.classList.remove("selected");
+      });
+
+      el.classList.add("selected");
+    }
+
+    function generateImage() {
+      const name = document.getElementById("nameInput").value.trim();
+      const img = new Image();
+      img.src = selectedImage;
+
+      img.onload = () => {
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        ctx.drawImage(img, 0, 0);
+
+        ctx.font = "bold 80px Arial";
+        ctx.fillStyle = "white";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+        ctx.shadowColor = "rgba(0,0,0,0.5)";
+        ctx.shadowBlur = 8;
+
+        ctx.fillText(name, canvas.width / 2, canvas.height * 0.82);
+
+        const link = document.createElement("a");
+        link.download = "eid.png";
+        link.href = canvas.toDataURL();
+        link.click();
+      };
+    }
+  </script>
+
+  <div class="footer">
+    هذا العمل مقدم لكم مجانًا من يزيد بن عبدالرحمن،<br>
+    ولا أرجو منكم إلا الدعاء لوالدي رحمه الله، وأن يحفظ الله والدتي ويمدّها بالصحة والعافية
+  </div>
+
+</body>
+</html>
