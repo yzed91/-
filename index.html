@@ -77,18 +77,13 @@
 
     button {
       margin-top: 12px;
-      padding: 12px 20px;
+      padding: 14px 24px;
       font-size: 18px;
       border: none;
-      border-radius: 10px;
-      background: #111;
+      border-radius: 12px;
+      background: #2d6cdf;
       color: #fff;
       cursor: pointer;
-    }
-
-    .secondary-btn {
-      background: #2d6cdf;
-      margin-right: 8px;
     }
 
     canvas {
@@ -111,12 +106,7 @@
       max-width: 100%;
       border-radius: 12px;
       box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-      cursor: default;
       pointer-events: none;
-    }
-
-    .actions {
-      margin-top: 14px;
     }
   </style>
 </head>
@@ -138,8 +128,8 @@
   </div>
 
   <div class="images">
-    <img src="eid1.PNG" onclick="selectImage(this, 'eid1.PNG')" class="selected" alt="التصميم الأول">
-    <img src="eid2.PNG" onclick="selectImage(this, 'eid2.PNG')" alt="التصميم الثاني">
+    <img src="eid1.PNG" onclick="selectImage(this, 'eid1.PNG')" class="selected">
+    <img src="eid2.PNG" onclick="selectImage(this, 'eid2.PNG')">
   </div>
 
   <input type="text" id="nameInput" placeholder="اكتب اسمك هنا">
@@ -151,15 +141,13 @@
   <div id="resultContainer">
     <div id="resultHint">
       تم إنشاء الصورة بنجاح.<br>
-      لحفظها استخدم زر تحميل الصورة فقط.
+      اضغط زر "حفظ الصورة" لحفظها.
     </div>
 
-    <img id="resultImage" src="" alt="الصورة الناتجة">
+    <img id="resultImage" src="">
 
-    <div class="actions">
-      <button id="shareBtn" class="secondary-btn" style="display:none;" onclick="shareImage()">مشاركة / حفظ</button>
-      <button id="downloadBtn" onclick="downloadGeneratedImage()">تحميل الصورة</button>
-    </div>
+    <br>
+    <button id="shareBtn" onclick="shareImage()">حفظ الصورة</button>
   </div>
 
   <script>
@@ -201,17 +189,6 @@
       return new Blob([u8arr], { type: mime });
     }
 
-    function downloadGeneratedImage() {
-      if (!generatedImageURL) return;
-
-      const link = document.createElement("a");
-      link.download = "eid.png";
-      link.href = generatedImageURL;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-    }
-
     async function shareImage() {
       if (!generatedBlob) return;
 
@@ -223,16 +200,15 @@
             files: [file],
             title: "تهنئة العيد"
           });
-        } else if (navigator.share) {
-          await navigator.share({
-            title: "تهنئة العيد",
-            text: "تم إنشاء صورة التهنئة."
-          });
         } else {
-          alert("ميزة المشاركة غير مدعومة هنا.");
+          const link = document.createElement("a");
+          link.download = "eid.png";
+          link.href = generatedImageURL;
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
         }
-      } catch (e) {
-      }
+      } catch (e) {}
     }
 
     async function generateImage() {
@@ -258,7 +234,6 @@
       canvas.width = img.width;
       canvas.height = img.height;
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0);
 
       let color = "#E9C699";
@@ -277,23 +252,14 @@
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.direction = "rtl";
+
       ctx.fillText(name, x, y, maxWidth);
 
       generatedImageURL = canvas.toDataURL("image/png");
       generatedBlob = dataURLToBlob(generatedImageURL);
 
-      const resultContainer = document.getElementById("resultContainer");
-      const resultImage = document.getElementById("resultImage");
-      const shareBtn = document.getElementById("shareBtn");
-
-      resultImage.src = generatedImageURL;
-      resultContainer.style.display = "block";
-
-      if (navigator.share) {
-        shareBtn.style.display = "inline-block";
-      } else {
-        shareBtn.style.display = "none";
-      }
+      document.getElementById("resultImage").src = generatedImageURL;
+      document.getElementById("resultContainer").style.display = "block";
     }
   </script>
 
