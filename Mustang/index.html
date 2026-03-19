@@ -1,1 +1,219 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>تهنئة العيد</title>
 
+  <style>
+    @font-face {
+      font-family: "Hacen";
+      src: url("../HacenTunisia.ttf") format("truetype");
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h2 {
+      color: #222;
+      margin-bottom: 10px;
+    }
+
+    .note {
+      max-width: 700px;
+      margin: 0 auto 10px auto;
+      font-size: 13px;
+      color: #888;
+      line-height: 2;
+    }
+
+    .eid-text {
+      margin-bottom: 15px;
+      font-size: 15px;
+      color: #444;
+    }
+
+    input {
+      width: 80%;
+      max-width: 320px;
+      padding: 12px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    button {
+      margin-top: 12px;
+      padding: 14px 24px;
+      font-size: 18px;
+      border: none;
+      border-radius: 12px;
+      background: #2d6cdf;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    canvas {
+      display: none;
+    }
+
+    #resultContainer {
+      margin-top: 20px;
+      display: none;
+    }
+
+    #resultHint {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 12px;
+      line-height: 1.8;
+    }
+
+    #resultImage {
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>اكتب اسمك</h2>
+
+  <div class="note" style="color: #1B6C64;">
+    هذا العمل مقدم لكم مجانًا من يزيد بن عبدالرحمن اليامي،<br>
+    ولا أرجو منكم إلا الدعاء لوالدي رحمه الله، وأن يحفظ الله والدتي ويمدّها بالصحة والعافية
+  </div>
+
+  <div class="eid-text">
+    وكل عام وأنتم بخير
+  </div>
+
+  <input type="text" id="nameInput" placeholder="اكتب اسمك هنا">
+  <br>
+  <button onclick="generateImage()">إنشاء الصورة</button>
+
+  <canvas id="canvas"></canvas>
+
+  <div id="resultContainer">
+    <div id="resultHint">
+      تم إنشاء الصورة بنجاح.<br>
+      اضغط زر "حفظ الصورة" لحفظها.
+    </div>
+
+    <img id="resultImage" src="">
+
+    <br>
+    <button id="shareBtn" onclick="shareImage()">حفظ الصورة</button>
+  </div>
+
+  <script>
+    let selectedImage = "mustang.png";
+    let generatedImageURL = "";
+    let generatedBlob = null;
+
+    function fitText(ctx, text, maxWidth, startSize, fontName) {
+      let size = startSize;
+      while (size > 12) {
+        ctx.font = `${size}px "${fontName}"`;
+        if (ctx.measureText(text).width <= maxWidth) {
+          return size;
+        }
+        size--;
+      }
+      return size;
+    }
+
+    function dataURLToBlob(dataURL) {
+      const arr = dataURL.split(",");
+      const mime = arr[0].match(/:(.*?);/)[1];
+      const bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+
+      return new Blob([u8arr], { type: mime });
+    }
+
+    async function shareImage() {
+      if (!generatedBlob) return;
+
+      const file = new File([generatedBlob], "mustang.png", { type: "image/png" });
+
+      try {
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: "تهنئة العيد"
+          });
+        } else {
+          const link = document.createElement("a");
+          link.download = "mustang.png";
+          link.href = generatedImageURL;
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+        }
+      } catch (e) {}
+    }
+
+    async function generateImage() {
+      const name = document.getElementById("nameInput").value.trim();
+      if (!name) return;
+
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+
+      const img = new Image();
+      img.src = selectedImage;
+
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+      });
+
+      if (document.fonts) {
+        await document.fonts.load('27px "Hacen"');
+        await document.fonts.ready;
+      }
+
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      ctx.drawImage(img, 0, 0);
+
+      const color = "#FFFFFF";
+      const x = 540;
+      const y = 1205;
+      const maxWidth = 360;
+
+      const fontSize = fitText(ctx, name, maxWidth, 27, "Hacen");
+
+      ctx.font = `${fontSize}px "Hacen"`;
+      ctx.fillStyle = color;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.direction = "rtl";
+
+      ctx.fillText(name, x, y, maxWidth);
+
+      generatedImageURL = canvas.toDataURL("image/png");
+      generatedBlob = dataURLToBlob(generatedImageURL);
+
+      document.getElementById("resultImage").src = generatedImageURL;
+      document.getElementById("resultContainer").style.display = "block";
+    }
+  </script>
+
+</body>
+</html>
