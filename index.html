@@ -7,8 +7,8 @@
 
   <style>
     @font-face {
-      font-family: "Ping";
-      src: url("alfont_com_PingARLT-Regular.otf") format("opentype");
+      font-family: "Myriad";
+      src: url("Myriad Arabic Regular.ttf") format("truetype");
     }
 
     body {
@@ -227,7 +227,7 @@
       });
 
       if (document.fonts) {
-        await document.fonts.load('35px "Ping"');
+        await document.fonts.load('35px "Myriad"');
         await document.fonts.ready;
       }
 
@@ -255,9 +255,9 @@
 
       const maxWidth = 360;
 
-      const fontSize = fitText(ctx, name, maxWidth, 50, "Ping");
+      const fontSize = fitText(ctx, name, maxWidth, 50, "Myriad");
 
-      ctx.font = `${fontSize}px "Ping"`;
+      ctx.font = `${fontSize}px "Myriad"`;
       ctx.fillStyle = color;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
