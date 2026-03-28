@@ -95,18 +95,9 @@
       display: none;
     }
 
-    #resultHint {
-      font-size: 13px;
-      color: #666;
-      margin-bottom: 12px;
-      line-height: 1.8;
-    }
-
     #resultImage {
       max-width: 100%;
       border-radius: 12px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-      pointer-events: none;
     }
   </style>
 </head>
@@ -123,10 +114,6 @@
     وكل عام وأنتم بخير
   </div>
 
-  <div class="hint">
-    يمكنك اختيار التصميم بالنقر على الصورة
-  </div>
-
   <div class="images">
     <img src="ADHA-1.png" onclick="selectImage(this, 'ADHA-1.png')" class="selected">
     <img src="ADHA-2.png" onclick="selectImage(this, 'ADHA-2.png')">
@@ -139,15 +126,9 @@
   <canvas id="canvas"></canvas>
 
   <div id="resultContainer">
-    <div id="resultHint">
-      تم إنشاء الصورة بنجاح.<br>
-      اضغط زر "حفظ الصورة" لحفظها.
-    </div>
-
     <img id="resultImage" src="">
-
     <br>
-    <button id="shareBtn" onclick="shareImage()">حفظ الصورة</button>
+    <button onclick="shareImage()">حفظ الصورة</button>
   </div>
 
   <script>
@@ -165,7 +146,7 @@
 
     function fitText(ctx, text, maxWidth, startSize, fontName) {
       let size = startSize;
-      while (size > 12) {
+      while (size > 20) { // 👈 ما ينزل أقل من 20
         ctx.font = `${size}px "${fontName}"`;
         if (ctx.measureText(text).width <= maxWidth) {
           return size;
@@ -173,42 +154,6 @@
         size--;
       }
       return size;
-    }
-
-    function dataURLToBlob(dataURL) {
-      const arr = dataURL.split(",");
-      const mime = arr[0].match(/:(.*?);/)[1];
-      const bstr = atob(arr[1]);
-      let n = bstr.length;
-      const u8arr = new Uint8Array(n);
-
-      while (n--) {
-        u8arr[n] = bstr.charCodeAt(n);
-      }
-
-      return new Blob([u8arr], { type: mime });
-    }
-
-    async function shareImage() {
-      if (!generatedBlob) return;
-
-      const file = new File([generatedBlob], "eid.png", { type: "image/png" });
-
-      try {
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            files: [file],
-            title: "تهنئة العيد"
-          });
-        } else {
-          const link = document.createElement("a");
-          link.download = "eid.png";
-          link.href = generatedImageURL;
-          document.body.appendChild(link);
-          link.click();
-          link.remove();
-        }
-      } catch (e) {}
     }
 
     async function generateImage() {
@@ -226,22 +171,14 @@
         img.onerror = reject;
       });
 
-      if (document.fonts) {
-        await document.fonts.load('15px "Myriad"');
-        await document.fonts.ready;
-      }
+      await document.fonts.load('40px "Myriad"');
 
       canvas.width = img.width;
       canvas.height = img.height;
 
       ctx.drawImage(img, 0, 0);
 
-      let color = "#E9C699";
-
-      if (selectedImage === "ADHA-1.png") {
-        color = "#28706d";
-      }
-
+      let color = "#28706d";
       if (selectedImage === "ADHA-2.png") {
         color = "#444D65";
       }
@@ -255,21 +192,27 @@
 
       const maxWidth = 360;
 
-      const fontSize = fitText(ctx, name, maxWidth, 15, "Myriad");
+      // 👇 حجم مناسب فعلي
+      const fontSize = fitText(ctx, name, maxWidth, 40, "Myriad");
 
       ctx.font = `${fontSize}px "Myriad"`;
       ctx.fillStyle = color;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.direction = "rtl";
 
       ctx.fillText(name, x, y, maxWidth);
 
       generatedImageURL = canvas.toDataURL("image/png");
-      generatedBlob = dataURLToBlob(generatedImageURL);
 
       document.getElementById("resultImage").src = generatedImageURL;
       document.getElementById("resultContainer").style.display = "block";
+    }
+
+    function shareImage() {
+      const link = document.createElement("a");
+      link.download = "eid.png";
+      link.href = generatedImageURL;
+      link.click();
     }
   </script>
 
