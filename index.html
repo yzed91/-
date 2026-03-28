@@ -128,6 +128,7 @@
   <script>
     let selectedImage = "ADHA-1.png";
     let generatedImageURL = "";
+    let generatedBlob = null;
 
     function selectImage(el, src) {
       selectedImage = src;
@@ -149,6 +150,20 @@
       return size;
     }
 
+    function dataURLToBlob(dataURL) {
+      const arr = dataURL.split(",");
+      const mime = arr[0].match(/:(.*?);/)[1];
+      const bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+
+      return new Blob([u8arr], { type: mime });
+    }
+
     async function generateImage() {
       const name = document.getElementById("nameInput").value.trim();
       if (!name) return;
@@ -164,7 +179,10 @@
         img.onerror = reject;
       });
 
-      await document.fonts.load('27px "Hacen"');
+      if (document.fonts) {
+        await document.fonts.load('27px "Hacen"');
+        await document.fonts.ready;
+      }
 
       canvas.width = img.width;
       canvas.height = img.height;
@@ -190,27 +208,43 @@
       }
 
       const maxWidth = 360;
-
       const fontSize = fitText(ctx, name, maxWidth, 35, "Hacen");
 
       ctx.font = `${fontSize}px "Hacen"`;
       ctx.fillStyle = color;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
+      ctx.direction = "rtl";
 
       ctx.fillText(name, x, y, maxWidth);
 
       generatedImageURL = canvas.toDataURL("image/png");
+      generatedBlob = dataURLToBlob(generatedImageURL);
 
       document.getElementById("resultImage").src = generatedImageURL;
       document.getElementById("resultContainer").style.display = "block";
     }
 
-    function shareImage() {
-      const link = document.createElement("a");
-      link.download = "eid.png";
-      link.href = generatedImageURL;
-      link.click();
+    async function shareImage() {
+      if (!generatedBlob) return;
+
+      const file = new File([generatedBlob], "eid.png", { type: "image/png" });
+
+      try {
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: "تهنئة العيد"
+          });
+        } else {
+          const link = document.createElement("a");
+          link.download = "eid.png";
+          link.href = generatedImageURL;
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+        }
+      } catch (e) {}
     }
   </script>
 
