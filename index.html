@@ -134,7 +134,6 @@
   <script>
     let selectedImage = "ADHA-1.png";
     let generatedImageURL = "";
-    let generatedBlob = null;
 
     function selectImage(el, src) {
       selectedImage = src;
@@ -146,7 +145,7 @@
 
     function fitText(ctx, text, maxWidth, startSize, fontName) {
       let size = startSize;
-      while (size > 20) { // 👈 ما ينزل أقل من 20
+      while (size > 20) {
         ctx.font = `${size}px "${fontName}"`;
         if (ctx.measureText(text).width <= maxWidth) {
           return size;
@@ -186,13 +185,17 @@
       const x = 540;
 
       let y = 1205;
+
       if (selectedImage === "ADHA-1.png") {
         y = 1435;
       }
 
+      if (selectedImage === "ADHA-2.png") {
+        y = 1100;
+      }
+
       const maxWidth = 360;
 
-      // 👇 حجم مناسب فعلي
       const fontSize = fitText(ctx, name, maxWidth, 40, "Myriad");
 
       ctx.font = `${fontSize}px "Myriad"`;
