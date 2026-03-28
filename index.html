@@ -7,8 +7,8 @@
 
   <style>
     @font-face {
-      font-family: "Hacen";
-      src: url("HacenTunisia.ttf") format("truetype");
+      font-family: "Ping";
+      src: url("alfont_com_PingARLT-Regular.otf") format("opentype");
     }
 
     body {
@@ -227,7 +227,7 @@
       });
 
       if (document.fonts) {
-        await document.fonts.load('27px "Hacen"');
+        await document.fonts.load('35px "Ping"');
         await document.fonts.ready;
       }
 
@@ -236,7 +236,6 @@
 
       ctx.drawImage(img, 0, 0);
 
-      // 🎯 الألوان حسب الصورة
       let color = "#E9C699";
 
       if (selectedImage === "ADHA-1.png") {
@@ -249,7 +248,6 @@
 
       const x = 540;
 
-      // 🎯 الموقع حسب الصورة
       let y = 1205;
       if (selectedImage === "ADHA-1.png") {
         y = 1435;
@@ -257,9 +255,9 @@
 
       const maxWidth = 360;
 
-      const fontSize = fitText(ctx, name, maxWidth, 35, "Hacen");
+      const fontSize = fitText(ctx, name, maxWidth, 50, "Ping");
 
-      ctx.font = `${fontSize}px "Hacen"`;
+      ctx.font = `${fontSize}px "Ping"`;
       ctx.fillStyle = color;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
