@@ -19,93 +19,198 @@
       padding: 20px;
     }
 
-    canvas {
-      max-width: 100%;
+    h2 {
+      color: #222;
+      margin-bottom: 10px;
+    }
+
+    .note {
+      max-width: 700px;
+      margin: 0 auto 10px auto;
+      font-size: 13px;
+      color: #888;
+      line-height: 2;
+    }
+
+    .eid-text {
+      margin-bottom: 15px;
+      font-size: 15px;
+      color: #444;
+    }
+
+    .images {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 10px 0 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .images img {
+      width: 140px;
       border-radius: 12px;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: 0.2s;
+    }
+
+    .images img.selected {
+      border-color: #000;
+      transform: scale(1.03);
+    }
+
+    input {
+      width: 80%;
+      max-width: 320px;
+      padding: 12px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
     }
 
     button {
-      margin-top: 20px;
-      padding: 14px 25px;
-      font-size: 16px;
+      margin-top: 12px;
+      padding: 14px 24px;
+      font-size: 18px;
       border: none;
-      border-radius: 10px;
-      background: #2f6fed;
+      border-radius: 12px;
+      background: #2d6cdf;
       color: #fff;
       cursor: pointer;
     }
+
+    canvas {
+      display: none;
+    }
+
+    #resultContainer {
+      margin-top: 20px;
+      display: none;
+    }
+
+    #resultImage {
+      max-width: 100%;
+      border-radius: 12px;
+    }
   </style>
 </head>
-
 <body>
 
-  <h2>حفظ الصورة</h2>
+  <h2>اختر التصميم واكتب اسمك</h2>
 
-  <!-- الكانفس -->
-  <canvas id="canvas" width="1080" height="1920"></canvas>
+  <div class="note" style="color: #1B6C64;">
+    هذا العمل مقدم لكم مجانًا من يزيد بن عبدالرحمن اليامي،<br>
+    ولا أرجو منكم إلا الدعاء لوالدي رحمه الله، وأن يحفظ الله والدتي ويمدّها بالصحة والعافية
+  </div>
 
-  <!-- زر الحفظ -->
-  <button onclick="saveImage()">حفظ الصورة</button>
+  <div class="eid-text">
+    وكل عام وأنتم بخير
+  </div>
+
+  <div class="images">
+    <img src="ADHA-1.png" onclick="selectImage(this, 'ADHA-1.png')" class="selected">
+    <img src="ADHA-2.png" onclick="selectImage(this, 'ADHA-2.png')">
+  </div>
+
+  <input type="text" id="nameInput" placeholder="اكتب اسمك هنا">
+  <br>
+  <button onclick="generateImage()">إنشاء الصورة</button>
+
+  <canvas id="canvas"></canvas>
+
+  <div id="resultContainer">
+    <img id="resultImage" src="">
+    <br>
+    <button onclick="shareImage()">حفظ الصورة</button>
+  </div>
 
   <script>
-    const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
+    let selectedImage = "ADHA-1.png";
+    let generatedImageURL = "";
 
-    // تحميل الصورة
-    const bg = new Image();
-    bg.src = "eid-template.jpg"; // غيرها حسب صورتك
+    function selectImage(el, src) {
+      selectedImage = src;
+      document.querySelectorAll(".images img").forEach(img => {
+        img.classList.remove("selected");
+      });
+      el.classList.add("selected");
+    }
 
-    bg.onload = () => {
-      ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
-
-      // مثال كتابة اسم
-      ctx.fillStyle = "#1B6C64";
-      ctx.font = "80px Hacen";
-      ctx.textAlign = "center";
-
-      ctx.fillText("يزيد", canvas.width / 2, 1000);
-    };
-
-    // ✅ الدالة الجديدة للحفظ (تحل مشكلة سناب)
-    async function saveImage() {
-      try {
-        const blob = await new Promise((resolve) =>
-          canvas.toBlob(resolve, "image/png", 1.0)
-        );
-
-        const file = new File([blob], "eid-greeting.png", {
-          type: "image/png",
-        });
-
-        // 🔥 الأفضل للجوال (ومنها سناب)
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            files: [file],
-            title: "Eid Greeting",
-          });
-          return;
+    function fitText(ctx, text, maxWidth, startSize, fontName) {
+      let size = startSize;
+      while (size > 12) {
+        ctx.font = `${size}px "${fontName}"`;
+        if (ctx.measureText(text).width <= maxWidth) {
+          return size;
         }
-
-        // fallback تحميل عادي
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "eid-greeting.png";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-
-        setTimeout(() => URL.revokeObjectURL(url), 2000);
-
-      } catch (error) {
-        console.log("Fallback triggered");
-
-        // 💥 حل سناب النهائي
-        canvas.toBlob((blob) => {
-          const url = URL.createObjectURL(blob);
-          window.open(url, "_blank");
-        }, "image/png", 1.0);
+        size--;
       }
+      return size;
+    }
+
+    async function generateImage() {
+      const name = document.getElementById("nameInput").value.trim();
+      if (!name) return;
+
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+
+      const img = new Image();
+      img.src = selectedImage;
+
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+      });
+
+      await document.fonts.load('27px "Hacen"');
+
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      ctx.drawImage(img, 0, 0);
+
+      let color = "#28706d";
+
+      if (selectedImage === "ADHA-2.png") {
+        color = "#d76959";
+      }
+
+      const x = 540;
+
+      let y = 1205;
+
+      if (selectedImage === "ADHA-1.png") {
+        y = 1435;
+      }
+
+      if (selectedImage === "ADHA-2.png") {
+        y = 595;
+      }
+
+      const maxWidth = 360;
+
+      const fontSize = fitText(ctx, name, maxWidth, 35, "Hacen");
+
+      ctx.font = `${fontSize}px "Hacen"`;
+      ctx.fillStyle = color;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+
+      ctx.fillText(name, x, y, maxWidth);
+
+      generatedImageURL = canvas.toDataURL("image/png");
+
+      document.getElementById("resultImage").src = generatedImageURL;
+      document.getElementById("resultContainer").style.display = "block";
+    }
+
+    function shareImage() {
+      const link = document.createElement("a");
+      link.download = "eid.png";
+      link.href = generatedImageURL;
+      link.click();
     }
   </script>
 
