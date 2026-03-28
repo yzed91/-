@@ -128,8 +128,9 @@
   </div>
 
   <div class="images">
-    <img src="eid1.png" onclick="selectImage(this, 'eid1.png')" class="selected">
-    <img src="eid2.png" onclick="selectImage(this, 'eid2.png')">
+    <!-- ✅ تم التعديل هنا -->
+    <img src="ADHA-1.png" onclick="selectImage(this, 'ADHA-1.png')" class="selected">
+    <img src="ADHA-2.png" onclick="selectImage(this, 'ADHA-2.png')">
   </div>
 
   <input type="text" id="nameInput" placeholder="اكتب اسمك هنا">
@@ -151,7 +152,8 @@
   </div>
 
   <script>
-    let selectedImage = "eid1.png";
+    // ✅ تم التعديل هنا
+    let selectedImage = "ADHA-1.png";
     let generatedImageURL = "";
     let generatedBlob = null;
 
@@ -237,7 +239,9 @@
       ctx.drawImage(img, 0, 0);
 
       let color = "#E9C699";
-      if (selectedImage === "eid2.png") {
+
+      // ✅ تم التعديل هنا
+      if (selectedImage === "ADHA-2.png") {
         color = "#444D65";
       }
 
