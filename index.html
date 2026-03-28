@@ -7,8 +7,8 @@
 
   <style>
     @font-face {
-      font-family: "Myriad";
-      src: url("Myriad Arabic Regular.ttf") format("truetype");
+      font-family: "Hacen";
+      src: url("HacenTunisia.ttf") format("truetype");
     }
 
     body {
@@ -139,7 +139,7 @@
 
     function fitText(ctx, text, maxWidth, startSize, fontName) {
       let size = startSize;
-      while (size > 20) {
+      while (size > 12) {
         ctx.font = `${size}px "${fontName}"`;
         if (ctx.measureText(text).width <= maxWidth) {
           return size;
@@ -164,7 +164,7 @@
         img.onerror = reject;
       });
 
-      await document.fonts.load('40px "Myriad"');
+      await document.fonts.load('27px "Hacen"');
 
       canvas.width = img.width;
       canvas.height = img.height;
@@ -174,7 +174,7 @@
       let color = "#28706d";
 
       if (selectedImage === "ADHA-2.png") {
-        color = "#d76959"; // 👈 اللون الجديد
+        color = "#d76959";
       }
 
       const x = 540;
@@ -191,9 +191,9 @@
 
       const maxWidth = 360;
 
-      const fontSize = fitText(ctx, name, maxWidth, 40, "Myriad");
+      const fontSize = fitText(ctx, name, maxWidth, 27, "Hacen");
 
-      ctx.font = `${fontSize}px "Myriad"`;
+      ctx.font = `${fontSize}px "Hacen"`;
       ctx.fillStyle = color;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
