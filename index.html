@@ -38,12 +38,6 @@
       color: #444;
     }
 
-    .hint {
-      color: #007BFF;
-      font-size: 14px;
-      margin-bottom: 10px;
-    }
-
     .images {
       display: flex;
       justify-content: center;
@@ -178,8 +172,9 @@
       ctx.drawImage(img, 0, 0);
 
       let color = "#28706d";
+
       if (selectedImage === "ADHA-2.png") {
-        color = "#444D65";
+        color = "#d76959"; // 👈 اللون الجديد
       }
 
       const x = 540;
@@ -191,7 +186,7 @@
       }
 
       if (selectedImage === "ADHA-2.png") {
-        y = 595;
+        y = 1100;
       }
 
       const maxWidth = 360;
