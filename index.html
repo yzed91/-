@@ -227,7 +227,7 @@
       });
 
       if (document.fonts) {
-        await document.fonts.load('35px "Myriad"');
+        await document.fonts.load('15px "Myriad"');
         await document.fonts.ready;
       }
 
@@ -255,7 +255,7 @@
 
       const maxWidth = 360;
 
-      const fontSize = fitText(ctx, name, maxWidth, 50, "Myriad");
+      const fontSize = fitText(ctx, name, maxWidth, 15, "Myriad");
 
       ctx.font = `${fontSize}px "Myriad"`;
       ctx.fillStyle = color;
