@@ -128,7 +128,6 @@
   </div>
 
   <div class="images">
-    <!-- ✅ تم التعديل هنا -->
     <img src="ADHA-1.png" onclick="selectImage(this, 'ADHA-1.png')" class="selected">
     <img src="ADHA-2.png" onclick="selectImage(this, 'ADHA-2.png')">
   </div>
@@ -152,7 +151,6 @@
   </div>
 
   <script>
-    // ✅ تم التعديل هنا
     let selectedImage = "ADHA-1.png";
     let generatedImageURL = "";
     let generatedBlob = null;
@@ -240,13 +238,18 @@
 
       let color = "#E9C699";
 
-      // ✅ تم التعديل هنا
       if (selectedImage === "ADHA-2.png") {
         color = "#444D65";
       }
 
       const x = 540;
-      const y = 1205;
+
+      // ✅ التعديل هنا
+      let y = 1205;
+      if (selectedImage === "ADHA-1.png") {
+        y = 1300;
+      }
+
       const maxWidth = 360;
 
       const fontSize = fitText(ctx, name, maxWidth, 35, "Hacen");
