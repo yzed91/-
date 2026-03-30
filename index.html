@@ -59,12 +59,20 @@
       border-radius: 12px;
       cursor: pointer;
       border: 3px solid transparent;
-      transition: 0.2s;
+      transition: 0.25s ease;
+      filter: grayscale(100%);
+      opacity: 0.75;
+    }
+
+    .images img:hover {
+      transform: scale(1.02);
     }
 
     .images img.selected {
       border-color: #000;
       transform: scale(1.03);
+      filter: grayscale(0%);
+      opacity: 1;
     }
 
     input {
@@ -204,7 +212,6 @@
       }
 
       const x = 540;
-
       let y = 1205;
 
       if (selectedImage === "ADHA-1.png") {
