@@ -3,7 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>تهنئة العيد</title>
+
+  <title>تهنئة العيد | YazYamiLab</title>
+
+  <!-- 🔥 Link Preview -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="تهنئة العيد | YazYamiLab">
+  <meta property="og:description" content="انشئ بطاقة تهنئتك في اقل مجهود">
+  <meta property="og:image" content="https://yazyamilab.com/preview.png">
+  <meta property="og:url" content="https://yazyamilab.com/">
+  <meta property="og:site_name" content="YazYamiLab">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="تهنئة العيد | YazYamiLab">
+  <meta name="twitter:description" content="انشئ بطاقة تهنئتك في اقل مجهود">
+  <meta name="twitter:image" content="https://yazyamilab.com/preview.png">
+
+  <!-- favicon -->
+  <link rel="icon" type="image/png" href="https://yazyamilab.com/logo2.png">
 
   <style>
     @font-face {
@@ -47,34 +64,15 @@
     }
 
     @keyframes logoIn {
-      0% {
-        opacity: 0;
-        transform: scale(0.7);
-      }
-      60% {
-        opacity: 1;
-        transform: scale(1.05);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
+      0% { opacity: 0; transform: scale(0.7); }
+      60% { opacity: 1; transform: scale(1.05); }
+      100% { opacity: 1; transform: scale(1); }
     }
 
-    /* نبضة خفيفة */
     @keyframes logoPulse {
-      0% {
-        transform: scale(1);
-        filter: drop-shadow(0 0 10px rgba(255,255,255,0.15));
-      }
-      50% {
-        transform: scale(1.03);
-        filter: drop-shadow(0 0 18px rgba(255,255,255,0.25));
-      }
-      100% {
-        transform: scale(1);
-        filter: drop-shadow(0 0 10px rgba(255,255,255,0.15));
-      }
+      0% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); }
     }
 
     #intro.hide {
@@ -159,9 +157,7 @@
       cursor: pointer;
     }
 
-    canvas {
-      display: none;
-    }
+    canvas { display: none; }
 
     #resultContainer {
       margin-top: 20px;
@@ -177,7 +173,6 @@
 
 <body>
 
-  <!-- 🎬 Intro -->
   <div id="intro">
     <img src="logo2.png">
   </div>
@@ -215,7 +210,6 @@
   </div>
 
   <script>
-    // 🎬 توقيت احترافي سريع
     window.addEventListener("load", () => {
       setTimeout(() => {
         document.getElementById("intro").classList.add("hide");
@@ -253,11 +247,7 @@
       const bstr = atob(arr[1]);
       let n = bstr.length;
       const u8arr = new Uint8Array(n);
-
-      while (n--) {
-        u8arr[n] = bstr.charCodeAt(n);
-      }
-
+      while (n--) u8arr[n] = bstr.charCodeAt(n);
       return new Blob([u8arr], { type: mime });
     }
 
@@ -271,26 +261,21 @@
       const img = new Image();
       img.src = selectedImage;
 
-      await new Promise((resolve, reject) => {
-        img.onload = resolve;
-        img.onerror = reject;
+      await new Promise((res, rej) => {
+        img.onload = res;
+        img.onerror = rej;
       });
 
-      if (document.fonts) {
-        await document.fonts.load('27px "Hacen"');
-        await document.fonts.ready;
-      }
+      await document.fonts.load('27px "Hacen"');
 
       canvas.width = img.width;
       canvas.height = img.height;
-
       ctx.drawImage(img, 0, 0);
 
-      let color = "#28706d";
-      if (selectedImage === "ADHA-2.png") color = "#d76959";
+      let color = selectedImage === "ADHA-2.png" ? "#d76959" : "#28706d";
 
       const x = 540;
-      let y = selectedImage === "ADHA-1.png" ? 1435 : 595;
+      const y = selectedImage === "ADHA-1.png" ? 1435 : 595;
 
       const maxWidth = 360;
       const fontSize = fitText(ctx, name, maxWidth, 35, "Hacen");
