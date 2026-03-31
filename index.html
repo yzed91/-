@@ -310,13 +310,13 @@
     async function shareImage() {
       if (!generatedBlob) return;
 
-      const file = new File([generatedBlob], "eid.png", { type: "image/png" });
+      const file = new File([generatedBlob], "تهنئة.png", { type: "image/png" });
 
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({ files: [file] });
       } else {
         const link = document.createElement("a");
-        link.download = "eid.png";
+        link.download = "تهنئة.png";
         link.href = generatedImageURL;
         link.click();
       }
