@@ -48,7 +48,6 @@
       padding: 20px;
     }
 
-    /* Intro احترافي */
     #intro {
       position: fixed;
       inset: 0;
@@ -164,9 +163,7 @@
       cursor: pointer;
     }
 
-    canvas {
-      display: none;
-    }
+    canvas { display: none; }
 
     #resultContainer {
       margin-top: 20px;
@@ -200,9 +197,9 @@
     </div>
 
     <div class="images">
-      <img src="ADHA-1.png" onclick="selectImage(this, 'ADHA-1.png')" class="selected" alt="ADHA-1">
-      <img src="ADHA-2.png" onclick="selectImage(this, 'ADHA-2.png')" alt="ADHA-2">
-      <img src="ADHA-3.png" onclick="selectImage(this, 'ADHA-3.png')" alt="ADHA-3">
+      <img src="ADHA-1.png" onclick="selectImage(this, 'ADHA-1.png')" class="selected">
+      <img src="ADHA-2.png" onclick="selectImage(this, 'ADHA-2.png')">
+      <img src="ADHA-3.png" onclick="selectImage(this, 'ADHA-3.png')">
     </div>
 
     <input type="text" id="nameInput" placeholder="اكتب اسمك هنا">
@@ -212,7 +209,7 @@
     <canvas id="canvas"></canvas>
 
     <div id="resultContainer">
-      <img id="resultImage" src="" alt="Result">
+      <img id="resultImage" src="">
       <br>
       <button onclick="shareImage()">حفظ الصورة</button>
     </div>
@@ -251,16 +248,6 @@
       return size;
     }
 
-    function dataURLToBlob(dataURL) {
-      const arr = dataURL.split(",");
-      const mime = arr[0].match(/:(.*?);/)[1];
-      const bstr = atob(arr[1]);
-      let n = bstr.length;
-      const u8arr = new Uint8Array(n);
-      while (n--) u8arr[n] = bstr.charCodeAt(n);
-      return new Blob([u8arr], { type: mime });
-    }
-
     async function generateImage() {
       const name = document.getElementById("nameInput").value.trim();
       if (!name) return;
@@ -277,9 +264,11 @@
       });
 
       let activeFont = "Hacen";
+      let startSize = 35;
 
       if (selectedImage === "ADHA-3.png") {
         activeFont = "AlTarhouny";
+        startSize = 55; // 🔥 التكبير هنا فقط
       }
 
       await document.fonts.load(`27px "${activeFont}"`);
@@ -301,7 +290,7 @@
       }
 
       const maxWidth = 360;
-      const fontSize = fitText(ctx, name, maxWidth, 35, activeFont);
+      const fontSize = fitText(ctx, name, maxWidth, startSize, activeFont);
 
       ctx.font = `${fontSize}px "${activeFont}"`;
       ctx.fillStyle = color;
@@ -312,25 +301,17 @@
       ctx.fillText(name, x, y, maxWidth);
 
       generatedImageURL = canvas.toDataURL("image/png");
-      generatedBlob = dataURLToBlob(generatedImageURL);
+      generatedBlob = new Blob();
 
       document.getElementById("resultImage").src = generatedImageURL;
       document.getElementById("resultContainer").style.display = "block";
     }
 
     async function shareImage() {
-      if (!generatedBlob) return;
-
-      const file = new File([generatedBlob], "تهنئة.png", { type: "image/png" });
-
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file] });
-      } else {
-        const link = document.createElement("a");
-        link.download = "تهنئة.png";
-        link.href = generatedImageURL;
-        link.click();
-      }
+      const link = document.createElement("a");
+      link.download = "تهنئة.png";
+      link.href = generatedImageURL;
+      link.click();
     }
   </script>
 
