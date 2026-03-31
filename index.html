@@ -35,11 +35,6 @@
       src: url("Myriad Arabic Regular.ttf") format("truetype");
     }
 
-    @font-face {
-      font-family: "MehrabanArabic";
-      src: url("MehrabanArabicTRIAL-Regular.otf") format("opentype");
-    }
-
     body {
       font-family: Arial, sans-serif;
       text-align: center;
@@ -48,6 +43,7 @@
       padding: 20px;
     }
 
+    /* Intro احترافي */
     #intro {
       position: fixed;
       inset: 0;
@@ -163,7 +159,9 @@
       cursor: pointer;
     }
 
-    canvas { display: none; }
+    canvas {
+      display: none;
+    }
 
     #resultContainer {
       margin-top: 20px;
@@ -197,9 +195,9 @@
     </div>
 
     <div class="images">
-      <img src="ADHA-1.png" onclick="selectImage(this, 'ADHA-1.png')" class="selected">
-      <img src="ADHA-2.png" onclick="selectImage(this, 'ADHA-2.png')">
-      <img src="ADHA-3.png" onclick="selectImage(this, 'ADHA-3.png')">
+      <img src="ADHA-1.png" onclick="selectImage(this, 'ADHA-1.png')" class="selected" alt="ADHA-1">
+      <img src="ADHA-2.png" onclick="selectImage(this, 'ADHA-2.png')" alt="ADHA-2">
+      <img src="ADHA-3.png" onclick="selectImage(this, 'ADHA-3.png')" alt="ADHA-3">
     </div>
 
     <input type="text" id="nameInput" placeholder="اكتب اسمك هنا">
@@ -209,7 +207,7 @@
     <canvas id="canvas"></canvas>
 
     <div id="resultContainer">
-      <img id="resultImage" src="">
+      <img id="resultImage" src="" alt="Result">
       <br>
       <button onclick="shareImage()">حفظ الصورة</button>
     </div>
@@ -234,6 +232,18 @@
         img.classList.remove("selected");
       });
       el.classList.add("selected");
+    }
+
+    function fitText(ctx, text, maxWidth, startSize, fontName) {
+      let size = startSize;
+      while (size > 12) {
+        ctx.font = `${size}px "${fontName}"`;
+        if (ctx.measureText(text).width <= maxWidth) {
+          return size;
+        }
+        size--;
+      }
+      return size;
     }
 
     function dataURLToBlob(dataURL) {
@@ -261,15 +271,7 @@
         img.onerror = rej;
       });
 
-      let activeFont = "Hacen";
-      let fontSize = 35;
-
-      if (selectedImage === "ADHA-3.png") {
-        activeFont = "MehrabanArabic";
-        fontSize = 65; // 👈 ثابت بدون تصغير
-      }
-
-      await document.fonts.load(`27px "${activeFont}"`);
+      await document.fonts.load('27px "Hacen"');
 
       canvas.width = img.width;
       canvas.height = img.height;
@@ -287,18 +289,16 @@
         y = 450;
       }
 
-      if (selectedImage !== "ADHA-3.png") {
-        const maxWidth = 360;
-        fontSize = fitText(ctx, name, maxWidth, fontSize, activeFont);
-      }
+      const maxWidth = 360;
+      const fontSize = fitText(ctx, name, maxWidth, 35, "Hacen");
 
-      ctx.font = `${fontSize}px "${activeFont}"`;
+      ctx.font = `${fontSize}px "Hacen"`;
       ctx.fillStyle = color;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.direction = "rtl";
 
-      ctx.fillText(name, x, y);
+      ctx.fillText(name, x, y, maxWidth);
 
       generatedImageURL = canvas.toDataURL("image/png");
       generatedBlob = dataURLToBlob(generatedImageURL);
