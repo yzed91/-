@@ -35,6 +35,11 @@
       src: url("Myriad Arabic Regular.ttf") format("truetype");
     }
 
+    @font-face {
+      font-family: "MehrabanArabic";
+      src: url("MehrabanArabicTRIAL-Regular.otf") format("opentype");
+    }
+
     body {
       font-family: Arial, sans-serif;
       text-align: center;
@@ -271,7 +276,15 @@
         img.onerror = rej;
       });
 
-      await document.fonts.load('27px "Hacen"');
+      let activeFont = "Hacen";
+      let startSize = 35;
+
+      if (selectedImage === "ADHA-3.png") {
+        activeFont = "MehrabanArabic";
+        startSize = 50;
+      }
+
+      await document.fonts.load(`27px "${activeFont}"`);
 
       canvas.width = img.width;
       canvas.height = img.height;
@@ -290,9 +303,9 @@
       }
 
       const maxWidth = 360;
-      const fontSize = fitText(ctx, name, maxWidth, 35, "Hacen");
+      const fontSize = fitText(ctx, name, maxWidth, startSize, activeFont);
 
-      ctx.font = `${fontSize}px "Hacen"`;
+      ctx.font = `${fontSize}px "${activeFont}"`;
       ctx.fillStyle = color;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
