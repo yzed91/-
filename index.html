@@ -35,6 +35,11 @@
       src: url("Myriad Arabic Regular.ttf") format("truetype");
     }
 
+    @font-face {
+      font-family: "AlTarhouny";
+      src: url("Al-Tarhouny.ttf") format("truetype");
+    }
+
     body {
       font-family: Arial, sans-serif;
       text-align: center;
@@ -271,7 +276,13 @@
         img.onerror = rej;
       });
 
-      await document.fonts.load('27px "Hacen"');
+      let activeFont = "Hacen";
+
+      if (selectedImage === "ADHA-3.png") {
+        activeFont = "AlTarhouny";
+      }
+
+      await document.fonts.load(`27px "${activeFont}"`);
 
       canvas.width = img.width;
       canvas.height = img.height;
@@ -290,9 +301,9 @@
       }
 
       const maxWidth = 360;
-      const fontSize = fitText(ctx, name, maxWidth, 35, "Hacen");
+      const fontSize = fitText(ctx, name, maxWidth, 35, activeFont);
 
-      ctx.font = `${fontSize}px "Hacen"`;
+      ctx.font = `${fontSize}px "${activeFont}"`;
       ctx.fillStyle = color;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
