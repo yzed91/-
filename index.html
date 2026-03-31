@@ -20,7 +20,7 @@
   <meta name="twitter:description" content="انشئ بطاقة تهنئتك في اقل مجهود">
   <meta name="twitter:image" content="https://yazyamilab.com/preview.png">
 
-  <!-- Safari + iPhone icon -->
+  <!-- Icons -->
   <link rel="icon" type="image/png" href="https://yazyamilab.com/preview.png">
   <link rel="apple-touch-icon" href="https://yazyamilab.com/preview.png">
 
@@ -35,6 +35,12 @@
       src: url("Myriad Arabic Regular.ttf") format("truetype");
     }
 
+    /* 🔥 الخط الجديد */
+    @font-face {
+      font-family: "Tarhouny";
+      src: url("Al-Tarhouny.ttf") format("truetype");
+    }
+
     body {
       font-family: Arial, sans-serif;
       text-align: center;
@@ -43,7 +49,6 @@
       padding: 20px;
     }
 
-    /* Intro احترافي */
     #intro {
       position: fixed;
       inset: 0;
@@ -52,29 +57,19 @@
       align-items: center;
       justify-content: center;
       z-index: 9999;
-      opacity: 1;
       transition: opacity 0.5s ease;
     }
 
     #intro img {
       width: 150px;
-      max-width: 42vw;
       opacity: 0;
       transform: scale(0.85);
-      animation: logoIn 0.9s ease forwards, logoPulse 1.8s ease-in-out 0.9s;
-      filter: drop-shadow(0 0 10px rgba(255,255,255,0.15));
+      animation: logoIn 0.9s ease forwards;
     }
 
     @keyframes logoIn {
       0% { opacity: 0; transform: scale(0.7); }
-      60% { opacity: 1; transform: scale(1.05); }
       100% { opacity: 1; transform: scale(1); }
-    }
-
-    @keyframes logoPulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.03); }
-      100% { transform: scale(1); }
     }
 
     #intro.hide {
@@ -82,43 +77,30 @@
       pointer-events: none;
     }
 
-    #mainContent {
-      transition: filter 0.4s ease, opacity 0.4s ease;
-    }
-
     #mainContent.blur {
       filter: blur(6px);
       opacity: 0.9;
     }
 
-    h2 {
-      color: #222;
-      margin-bottom: 10px;
-    }
-
     .note {
-      max-width: 700px;
-      margin: 0 auto 10px auto;
       font-size: 15px;
-      color: #888;
       line-height: 2;
-      font-family: "MyriadArabic", Arial, sans-serif;
+      font-family: "MyriadArabic";
+      color: #1B6C64;
     }
 
     .eid-text {
-      margin-bottom: 15px;
       font-size: 15px;
+      font-family: "MyriadArabic";
       color: #444;
-      font-family: "MyriadArabic", Arial, sans-serif;
-      font-weight: normal;
     }
 
     .images {
       display: flex;
       justify-content: center;
       gap: 15px;
-      margin: 10px 0 20px 0;
       flex-wrap: wrap;
+      margin: 15px 0;
     }
 
     .images img {
@@ -126,16 +108,16 @@
       border-radius: 12px;
       cursor: pointer;
       border: 3px solid transparent;
-      transition: 0.25s ease;
+      transition: 0.25s;
       filter: grayscale(100%);
-      opacity: 0.75;
+      opacity: 0.7;
     }
 
     .images img.selected {
-      border-color: #000;
-      transform: scale(1.03);
       filter: grayscale(0%);
       opacity: 1;
+      border-color: #000;
+      transform: scale(1.05);
     }
 
     input {
@@ -144,7 +126,6 @@
       padding: 12px;
       font-size: 18px;
       border-radius: 10px;
-      border: 1px solid #ccc;
       text-align: center;
     }
 
@@ -152,25 +133,14 @@
       margin-top: 12px;
       padding: 14px 24px;
       font-size: 18px;
-      border: none;
       border-radius: 12px;
       background: #2d6cdf;
       color: #fff;
-      cursor: pointer;
+      border: none;
     }
 
     canvas {
       display: none;
-    }
-
-    #resultContainer {
-      margin-top: 20px;
-      display: none;
-    }
-
-    #resultImage {
-      max-width: 100%;
-      border-radius: 12px;
     }
   </style>
 </head>
@@ -178,14 +148,14 @@
 <body>
 
   <div id="intro">
-    <img src="logo2.png" alt="Logo">
+    <img src="logo2.png">
   </div>
 
   <div id="mainContent" class="blur">
 
     <h2>اختر التصميم واكتب اسمك</h2>
 
-    <div class="note" style="color: #1B6C64;">
+    <div class="note">
       أهديكم هذا العمل مجاناً،<br>
       ولا أرجو منكم إلا دعوة صادقة لوالدي رحمه الله، وأن يحفظ الله والدتي ويديم عليها الصحة والعافية، وكل عام وأنتم بخير
     </div>
@@ -195,9 +165,9 @@
     </div>
 
     <div class="images">
-      <img src="ADHA-1.png" onclick="selectImage(this, 'ADHA-1.png')" class="selected" alt="ADHA-1">
-      <img src="ADHA-2.png" onclick="selectImage(this, 'ADHA-2.png')" alt="ADHA-2">
-      <img src="ADHA-3.png" onclick="selectImage(this, 'ADHA-3.png')" alt="ADHA-3">
+      <img src="ADHA-1.png" onclick="selectImage(this,'ADHA-1.png')" class="selected">
+      <img src="ADHA-2.png" onclick="selectImage(this,'ADHA-2.png')">
+      <img src="ADHA-3.png" onclick="selectImage(this,'ADHA-3.png')">
     </div>
 
     <input type="text" id="nameInput" placeholder="اكتب اسمك هنا">
@@ -207,7 +177,7 @@
     <canvas id="canvas"></canvas>
 
     <div id="resultContainer">
-      <img id="resultImage" src="" alt="Result">
+      <img id="resultImage">
       <br>
       <button onclick="shareImage()">حفظ الصورة</button>
     </div>
@@ -215,12 +185,12 @@
   </div>
 
   <script>
-    window.addEventListener("load", () => {
+    window.onload = () => {
       setTimeout(() => {
         document.getElementById("intro").classList.add("hide");
         document.getElementById("mainContent").classList.remove("blur");
       }, 1600);
-    });
+    };
 
     let selectedImage = "ADHA-1.png";
     let generatedImageURL = "";
@@ -228,19 +198,15 @@
 
     function selectImage(el, src) {
       selectedImage = src;
-      document.querySelectorAll(".images img").forEach(img => {
-        img.classList.remove("selected");
-      });
+      document.querySelectorAll(".images img").forEach(i => i.classList.remove("selected"));
       el.classList.add("selected");
     }
 
-    function fitText(ctx, text, maxWidth, startSize, fontName) {
+    function fitText(ctx, text, maxWidth, startSize, font) {
       let size = startSize;
       while (size > 12) {
-        ctx.font = `${size}px "${fontName}"`;
-        if (ctx.measureText(text).width <= maxWidth) {
-          return size;
-        }
+        ctx.font = `${size}px "${font}"`;
+        if (ctx.measureText(text).width <= maxWidth) return size;
         size--;
       }
       return size;
@@ -251,9 +217,9 @@
       const mime = arr[0].match(/:(.*?);/)[1];
       const bstr = atob(arr[1]);
       let n = bstr.length;
-      const u8arr = new Uint8Array(n);
-      while (n--) u8arr[n] = bstr.charCodeAt(n);
-      return new Blob([u8arr], { type: mime });
+      const u8 = new Uint8Array(n);
+      while (n--) u8[n] = bstr.charCodeAt(n);
+      return new Blob([u8], { type: mime });
     }
 
     async function generateImage() {
@@ -265,40 +231,37 @@
 
       const img = new Image();
       img.src = selectedImage;
+      await new Promise(res => img.onload = res);
 
-      await new Promise((res, rej) => {
-        img.onload = res;
-        img.onerror = rej;
-      });
-
-      await document.fonts.load('27px "Hacen"');
-
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0);
-
+      let font = "Hacen";
       let color = "#28706d";
-      const x = 540;
       let y = 1435;
 
       if (selectedImage === "ADHA-2.png") {
         color = "#d76959";
         y = 597;
-      } else if (selectedImage === "ADHA-3.png") {
+      }
+
+      if (selectedImage === "ADHA-3.png") {
+        font = "Tarhouny";
         color = "#FFFFFF";
         y = 450;
       }
 
-      const maxWidth = 360;
-      const fontSize = fitText(ctx, name, maxWidth, 35, "Hacen");
+      await document.fonts.load(`30px "${font}"`);
 
-      ctx.font = `${fontSize}px "Hacen"`;
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+
+      const size = fitText(ctx, name, 360, 40, font);
+
+      ctx.font = `${size}px "${font}"`;
       ctx.fillStyle = color;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.direction = "rtl";
 
-      ctx.fillText(name, x, y, maxWidth);
+      ctx.fillText(name, 540, y);
 
       generatedImageURL = canvas.toDataURL("image/png");
       generatedBlob = dataURLToBlob(generatedImageURL);
@@ -308,17 +271,15 @@
     }
 
     async function shareImage() {
-      if (!generatedBlob) return;
-
       const file = new File([generatedBlob], "تهنئة.png", { type: "image/png" });
 
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({ files: [file] });
       } else {
-        const link = document.createElement("a");
-        link.download = "تهنئة.png";
-        link.href = generatedImageURL;
-        link.click();
+        const a = document.createElement("a");
+        a.href = generatedImageURL;
+        a.download = "تهنئة.png";
+        a.click();
       }
     }
   </script>
