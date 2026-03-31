@@ -276,13 +276,8 @@
         img.onerror = rej;
       });
 
-      let activeFont = "Hacen";
-      let startSize = 35;
-
-      if (selectedImage === "ADHA-3.png") {
-        activeFont = "MehrabanArabic";
-        startSize = 45;
-      }
+      let activeFont = "MehrabanArabic";
+      let startSize = 45;
 
       await document.fonts.load(`27px "${activeFont}"`);
 
