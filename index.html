@@ -36,8 +36,8 @@
     }
 
     @font-face {
-      font-family: "AlTarhouny";
-      src: url("Al-Tarhouny.ttf") format("truetype");
+      font-family: "MehrabanArabic";
+      src: url("MehrabanArabicTRIAL-Regular.otf") format("opentype");
     }
 
     body {
@@ -277,8 +277,8 @@
       let startSize = 35;
 
       if (selectedImage === "ADHA-3.png") {
-        activeFont = "AlTarhouny";
-        startSize = 55; // 👈 التعديل الوحيد
+        activeFont = "MehrabanArabic";
+        startSize = 55;
       }
 
       await document.fonts.load(`27px "${activeFont}"`);
