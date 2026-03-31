@@ -6,7 +6,7 @@
 
   <title>تهنئة العيد | YazYamiLab</title>
 
-  <!-- 🔥 Link Preview (واتساب وغيره) -->
+  <!-- Link Preview -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="تهنئة العيد | YazYamiLab">
   <meta property="og:description" content="انشئ بطاقة تهنئتك في اقل مجهود">
@@ -20,7 +20,7 @@
   <meta name="twitter:description" content="انشئ بطاقة تهنئتك في اقل مجهود">
   <meta name="twitter:image" content="https://yazyamilab.com/preview.png">
 
-  <!-- 🔥 Safari + iPhone icon -->
+  <!-- Safari + iPhone icon -->
   <link rel="icon" type="image/png" href="https://yazyamilab.com/preview.png">
   <link rel="apple-touch-icon" href="https://yazyamilab.com/preview.png">
 
@@ -43,7 +43,7 @@
       padding: 20px;
     }
 
-    /* 🎬 Intro احترافي */
+    /* Intro احترافي */
     #intro {
       position: fixed;
       inset: 0;
@@ -159,7 +159,9 @@
       cursor: pointer;
     }
 
-    canvas { display: none; }
+    canvas {
+      display: none;
+    }
 
     #resultContainer {
       margin-top: 20px;
@@ -176,7 +178,7 @@
 <body>
 
   <div id="intro">
-    <img src="logo2.png">
+    <img src="logo2.png" alt="Logo">
   </div>
 
   <div id="mainContent" class="blur">
@@ -193,8 +195,9 @@
     </div>
 
     <div class="images">
-      <img src="ADHA-1.png" onclick="selectImage(this, 'ADHA-1.png')" class="selected">
-      <img src="ADHA-2.png" onclick="selectImage(this, 'ADHA-2.png')">
+      <img src="ADHA-1.png" onclick="selectImage(this, 'ADHA-1.png')" class="selected" alt="ADHA-1">
+      <img src="ADHA-2.png" onclick="selectImage(this, 'ADHA-2.png')" alt="ADHA-2">
+      <img src="ADHA-3.png" onclick="selectImage(this, 'ADHA-3.png')" alt="ADHA-3">
     </div>
 
     <input type="text" id="nameInput" placeholder="اكتب اسمك هنا">
@@ -204,7 +207,7 @@
     <canvas id="canvas"></canvas>
 
     <div id="resultContainer">
-      <img id="resultImage" src="">
+      <img id="resultImage" src="" alt="Result">
       <br>
       <button onclick="shareImage()">حفظ الصورة</button>
     </div>
@@ -274,10 +277,17 @@
       canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
 
-      let color = selectedImage === "ADHA-2.png" ? "#d76959" : "#28706d";
+      let color = "#28706d";
+      if (selectedImage === "ADHA-2.png") {
+        color = "#d76959";
+      }
 
       const x = 540;
-      const y = selectedImage === "ADHA-1.png" ? 1435 : 597;
+      let y = 1435;
+
+      if (selectedImage === "ADHA-2.png") {
+        y = 597;
+      }
 
       const maxWidth = 360;
       const fontSize = fitText(ctx, name, maxWidth, 35, "Hacen");
