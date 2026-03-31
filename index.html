@@ -278,15 +278,15 @@
       ctx.drawImage(img, 0, 0);
 
       let color = "#28706d";
-      if (selectedImage === "ADHA-2.png") {
-        color = "#d76959";
-      }
-
       const x = 540;
       let y = 1435;
 
       if (selectedImage === "ADHA-2.png") {
+        color = "#d76959";
         y = 597;
+      } else if (selectedImage === "ADHA-3.png") {
+        color = "#FFFFFF";
+        y = 400;
       }
 
       const maxWidth = 360;
