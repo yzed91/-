@@ -236,18 +236,6 @@
       el.classList.add("selected");
     }
 
-    function fitText(ctx, text, maxWidth, startSize, fontName) {
-      let size = startSize;
-      while (size > 12) {
-        ctx.font = `${size}px "${fontName}"`;
-        if (ctx.measureText(text).width <= maxWidth) {
-          return size;
-        }
-        size--;
-      }
-      return size;
-    }
-
     function dataURLToBlob(dataURL) {
       const arr = dataURL.split(",");
       const mime = arr[0].match(/:(.*?);/)[1];
@@ -274,11 +262,11 @@
       });
 
       let activeFont = "Hacen";
-      let startSize = 35;
+      let fontSize = 35;
 
       if (selectedImage === "ADHA-3.png") {
         activeFont = "MehrabanArabic";
-        startSize = 150; /* 🔥 التعديل الوحيد */
+        fontSize = 65; // 👈 ثابت بدون تصغير
       }
 
       await document.fonts.load(`27px "${activeFont}"`);
@@ -299,8 +287,10 @@
         y = 450;
       }
 
-      const maxWidth = 360;
-      const fontSize = fitText(ctx, name, maxWidth, startSize, activeFont);
+      if (selectedImage !== "ADHA-3.png") {
+        const maxWidth = 360;
+        fontSize = fitText(ctx, name, maxWidth, fontSize, activeFont);
+      }
 
       ctx.font = `${fontSize}px "${activeFont}"`;
       ctx.fillStyle = color;
@@ -308,7 +298,7 @@
       ctx.textBaseline = "middle";
       ctx.direction = "rtl";
 
-      ctx.fillText(name, x, y, maxWidth);
+      ctx.fillText(name, x, y);
 
       generatedImageURL = canvas.toDataURL("image/png");
       generatedBlob = dataURLToBlob(generatedImageURL);
